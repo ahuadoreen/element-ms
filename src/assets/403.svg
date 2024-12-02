@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg class="icon" style="width: 1em;height: 1em;vertical-align: middle;fill: currentColor;overflow: hidden;"
+    viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7387">
+    <path
+        d="M93.088 141.088h651.632v302.56h93.104V94.528A46.56 46.56 0 0 0 791.264 48H46.56A46.56 46.56 0 0 0 0 94.56v791.264a46.56 46.56 0 0 0 46.56 46.544h442.16v-93.088H93.088V141.088z"
+        fill="#edeef2" p-id="7388"></path>
+    <path
+        d="M800 512s-124.448 51.712-224 51.712v206.88C576 895.68 672.192 1000.032 800 1024c127.808-23.968 224-128.32 224-253.408v-206.88C924.448 563.712 800 512 800 512"
+        fill="#d5d7de" p-id="7389"></path>
+    <path d="M209.44 350.544h418.928V257.44H209.44zM209.44 560h232.736V466.88H209.456z" fill="#edeef2" p-id="7390">
+    </path>
+</svg>

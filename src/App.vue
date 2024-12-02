@@ -1,17 +1,27 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <el-config-provider namespace="ep" :locale="locale">
+    <router-view />
+  </el-config-provider>
 </template>
+
+<script lang="ts" setup>
+import { computed, onMounted } from "vue";
+import { getInitInfo } from "./init";
+import zhCn from "element-plus/es/locale/lang/zh-cn";
+import en from "element-plus/es/locale/lang/en";
+import useLangStore from "./store/langStore";
+
+const locale = computed(() => (useLangStore().lang === "en" ? en : zhCn));
+onMounted(() => {
+  getInitInfo();
+});
+</script>
 
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 

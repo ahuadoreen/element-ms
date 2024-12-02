@@ -1,0 +1,91 @@
+import type { CrudSchema } from '@/hooks/web/useCrudSchemas'
+import { BaseFormItem } from '@/types/form'
+#foreach ($column in $columns)
+#if (${column.listOperationCondition} && ${column.javaType} == "LocalDateTime")
+import { dateFormatter } from '@/utils/formatTime'
+#break
+#end
+#end
+
+export const rules = reactive({
+#foreach ($column in $columns)
+  #if (($column.createOperation || $column.updateOperation) && !$column.nullable && !${column.primaryKey})
+  $column.javaField: [required],
+  #end
+#end
+})
+
+const crudSchemas = reactive<CrudSchema[]>([
+#foreach ($column in $columns)
+if ($column.listOperation || $column.createOperation || $column.updateOperation)
+  {
+    label: '$column.columnComment',
+    field: '${column.javaField}',
+    #if ($column.listOperation)
+    isSearch: true,
+    #end
+    #if ($column.dictType)
+    dictType: '$column.dictType',
+    #if(${column.javaType.toLowerCase()} == "long" || ${column.javaType.toLowerCase()} == "integer" || ${column.javaType.toLowerCase()} == "short" || ${column.javaType.toLowerCase()} == "double" || ${column.javaType.toLowerCase()} == "bigdecimal")
+    dictClass: 'number',
+    #elseif(${column.javaType.toLowerCase()} == "boolean")
+    dictClass: 'boolean',
+    #else
+    dictClass: 'string',
+    #end
+    #end
+    #if(${column.javaType.toLowerCase()} == "date" || ${column.javaType.toLowerCase()} == "localdatetime")
+    formatter: dateFormatter,
+    #end
+    #if($column.listOperation && (${column.javaType.toLowerCase()} == "date" || ${column.javaType.toLowerCase()} == "localdate" || ${column.javaType.toLowerCase()} == "localdatetime" || ${column.listOperationCondition} == "IN"))
+    search: {
+      component: 'DatePicker',
+      #if (${column.listOperationCondition} == "BETWEEN")
+      componentProps: {
+      #if(${column.javaType.toLowerCase()} == "localdate")
+        type: 'daterange'
+        #else
+        type: 'datetimerange'
+        #end
+      }
+      #elseif(${column.listOperationCondition} == "IN")
+      componentProps: {
+        type: 'Select',
+        multiple: true
+      }
+      #end
+    },
+    #end
+    #if (!$column.createOperation && !$column.updateOperation)
+    isForm: false,
+    #else
+    #if(${column.javaType.toLowerCase()} == "date" || ${column.javaType.toLowerCase()} == "localdate" || ${column.javaType.toLowerCase()} == "localdatetime" || (!$column.dictType && (${column.listOperationCondition} == "" || ${column.javaType.toLowerCase()} == "long" || ${column.javaType.toLowerCase()} == "integer" || ${column.javaType.toLowerCase()} == "short" || ${column.javaType.toLowerCase()} == "double" || ${column.javaType.toLowerCase()} == "bigdecimal")))
+    form: {
+      #if(${column.javaType.toLowerCase()} == "date" || ${column.javaType.toLowerCase()} == "localdate" || ${column.javaType.toLowerCase()} == "localdatetime")
+      component: 'DatePicker',
+      #elseif(!$column.dictType && (${column.javaType.toLowerCase()} == "long" || ${column.javaType.toLowerCase()} == "integer" || ${column.javaType.toLowerCase()} == "short" || ${column.javaType.toLowerCase()} == "double" || ${column.javaType.toLowerCase()} == "bigdecimal"))
+      component: 'InputNumber'
+      #end
+      #if (${column.javaType.toLowerCase()} == "localdate")
+      componentProps: { valueFormat: 'YYYY-MM-DD' }
+      #end
+    },
+    #end
+    #end
+  },
+#end
+#end
+])
+export const { allSchemas } = useCrudSchemas(crudSchemas)
+
+// ${table.classComment} Req List
+export const baseFormItems: BaseFormItem[] = [
+#foreach ($column in $columns)
+#if ($column.listOperation && !$column.dictType && (${column.listOperationCondition} == "" || ${column.javaType.toLowerCase()} == "long" || ${column.javaType.toLowerCase()} == "integer" || ${column.javaType.toLowerCase()} == "short" || ${column.javaType.toLowerCase()} == "double" || ${column.javaType.toLowerCase()} == "bigdecimal"))
+  {
+    field: '${column.javaField}',
+    listOperationCondition: ''
+  },
+#end
+#end
+]
