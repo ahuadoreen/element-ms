@@ -10,7 +10,7 @@ import { t } from "~/i18n";
 
 // 创建axios实例
 const instance = axios.create({
-  baseURL: "/api", //设置API的基础URL
+  baseURL: import.meta.env.VITE_BASE_API_URL, //设置API的基础URL
   timeout: 300000,
 });
 

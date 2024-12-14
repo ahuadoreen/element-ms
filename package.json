@@ -4,8 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vite build",
+    "build:test": "vite build --mode test",
+    "build:prod": "vite build --mode prod",
+    "generate": "vite-ssg build",
+    "preview": "vite preview",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
